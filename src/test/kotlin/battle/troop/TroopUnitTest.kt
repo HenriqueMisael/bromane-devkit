@@ -1,7 +1,6 @@
 package battle.troop
 
 import battle.UnitType
-import battle.troop.impl.TroopImpl
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mock
@@ -26,7 +25,7 @@ internal class TroopUnitTest {
     internal fun setUp() {
         openMocks(this)
 
-        subject = TroopImpl(unitType, stance0)
+        subject = Troop(unitType, stance0)
 
         doReturn(8).`when`(unitType).health
         doReturn(5).`when`(unitType).attack

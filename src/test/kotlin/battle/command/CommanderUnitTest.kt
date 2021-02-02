@@ -1,9 +1,9 @@
 package battle.command
 
 import battle.Battle
+import battle.Team
 import battle.action.Action
 import battle.command.exceptions.CommanderWithNoAspiringActionsException
-import battle.command.impl.CommanderImpl
 import battle.troop.Troop
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -15,6 +15,9 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 
 internal class CommanderUnitTest {
+
+    @Mock
+    lateinit var team: Team
 
     @Mock
     lateinit var troop: Troop
@@ -34,39 +37,39 @@ internal class CommanderUnitTest {
     @Mock
     lateinit var battle: Battle
 
-    private lateinit var subject: CommanderImpl
+    private lateinit var subject: Commander
 
     @BeforeEach
     internal fun setUp() {
         openMocks(this)
-        subject = CommanderImpl(setOf(troop), listOf(aspiringAction0, aspiringAction1))
+        subject = Commander(team, setOf(troop), listOf(aspiringAction0, aspiringAction1))
 
-        `when`(aspiringAction0.getAction(battle)).thenReturn(action0)
-        `when`(aspiringAction1.getAction(battle)).thenReturn(action1)
+        `when`(aspiringAction0.action).thenReturn(action0)
+        `when`(aspiringAction1.action).thenReturn(action1)
     }
 
     @Test
     fun noAction() {
-        subject = CommanderImpl(setOf(troop), emptyList())
+        subject = Commander(team, setOf(troop), emptyList())
 
-        assertThrows<CommanderWithNoAspiringActionsException> { subject.getAction(battle) }
+        assertThrows<CommanderWithNoAspiringActionsException> { subject.getAction() }
     }
 
     @Test
     fun getFirstAction() {
-        `when`(aspiringAction0.checkDoability(battle)).thenReturn(true)
+        `when`(aspiringAction0.isDoable).thenReturn(true)
 
-        val action = subject.getAction(battle)
+        val action = subject.getAction()
         assertEquals(action, action0)
         assertNotEquals(action, action1)
     }
 
     @Test
     fun getSecondAction() {
-        `when`(aspiringAction0.checkDoability(battle)).thenReturn(false)
-        `when`(aspiringAction1.checkDoability(battle)).thenReturn(true)
+        `when`(aspiringAction0.isDoable).thenReturn(false)
+        `when`(aspiringAction1.isDoable).thenReturn(true)
 
-        val action = subject.getAction(battle)
+        val action = subject.getAction()
         assertNotEquals(action, action0)
         assertEquals(action, action1)
     }
