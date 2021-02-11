@@ -6,4 +6,9 @@ object MockitoHelper {
         argThat(matcher)
         return emptyList()
     }
+
+    fun <T> listThat(matcher: ArgumentMatcher<List<T>>?): List<T> {
+        argThat(matcher)
+        return emptyList()
+    }
 }

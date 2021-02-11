@@ -80,7 +80,7 @@ internal class BattleUnitTest {
     fun forwardAfterSettingUp() {
 
         subject.setup()
-        verify(battlefield).split(MockitoHelper.collectionThat { it.containsAll(listOf(team0, team1)) })
+        verify(battlefield).setup(MockitoHelper.listThat { it.containsAll(listOf(team0, team1)) })
 
         subject.forward()
 

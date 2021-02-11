@@ -11,7 +11,7 @@ class Battle(private val battlefield: Battlefield, private val commanders: Set<C
     private var setup = false
 
     fun setup() {
-        battlefield.split(teams)
+        battlefield.setup(teams)
 
         setup = true
     }
